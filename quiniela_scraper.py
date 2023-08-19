@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-from datetime import datetime
+from datetime import datetime, timedelta
 
 def generate_custom_date():
     nombres_meses = {
@@ -28,7 +28,9 @@ def generate_custom_date():
         6: "Domingo"
     }
 
-    fecha_actual = datetime.now()
+    gmt_offset = -3  # GMT-3 for Buenos Aires
+    fecha_actual = datetime.utcnow() + timedelta(hours=gmt_offset)
+
     dia_semana = fecha_actual.weekday()
     dia_mes = fecha_actual.day
     numero_mes = fecha_actual.month
@@ -56,14 +58,14 @@ def extract_results(container):
 
 
 def get_quiniela_type_by_time():
-    current_time = datetime.now().time()
-    if current_time >= datetime.strptime("21:00", "%H:%M").time():
+    current_time = datetime.utcnow() + timedelta(hours=-3)  # GMT-3 for Buenos Aires
+    if current_time.hour >= 21:
         return "Nocturna", "🕘"
-    elif current_time >= datetime.strptime("18:00", "%H:%M").time():
+    elif current_time.hour >= 18:
         return "Vespertina", "🕕"
-    elif current_time >= datetime.strptime("15:00", "%H:%M").time():
+    elif current_time.hour >= 15:
         return "Matutina", "🕒"
-    elif current_time >= datetime.strptime("12:00", "%H:%M").time():
+    elif current_time.hour >= 12:
         return "Primera", "🕛"
     else:
         return None, ""
