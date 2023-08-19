@@ -40,15 +40,20 @@ def extract_results(container):
     province_name = container.find('p', class_='tabla-pizarras-titulos-2021').text.strip()
     results = {}
 
-    result_entries = container.find_all('div', class_='row text-center quinielas2021-desktop')[0]
+    result_entries = container.find_all('div', class_='row text-center quinielas2021-desktop')
 
-    for entry in result_entries.find_all('div', class_='col-xs-5'):
-        result_type = entry.find('span', class_='no-enlaces-quinielas-2021').text
-        result_number = entry.find('span', class_='no-enlaces-numeros').text
+    if result_entries:
+        result_entries = result_entries[0]
 
-        results[result_type] = result_number
+        for entry in result_entries.find_all('div', class_='col-xs-5'):
+            result_type = entry.find('span', class_='no-enlaces-quinielas-2021').text
+            result_number = entry.find('span', class_='no-enlaces-numeros').text
+
+            results[result_type] = result_number
 
     return province_name, results
+
+
 
 def get_quiniela_type_by_time():
     current_time = datetime.now().time()
