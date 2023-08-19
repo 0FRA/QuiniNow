@@ -2,6 +2,10 @@ import requests
 import json
 from quiniela_scraper import show_results_by_type_and_provinces, get_quiniela_type_by_time
 import os
+from dotenv import load_dotenv
+
+load_dotenv()  # Cargar variables de entorno desde el archivo .env
+
 def send_results_to_webhook(results):
     # Obtener el valor de la variable de entorno
     webhook_url = os.getenv("WEBHOOK_URL")
