@@ -1,4 +1,4 @@
-name: daily-report
+name: daily-reports
 
 on:
   schedule:
