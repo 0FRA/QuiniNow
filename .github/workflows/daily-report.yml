@@ -10,12 +10,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
-    # Define una matriz de versiones de Python para ejecutar el flujo de trabajo en paralelo en diferentes versiones
-    strategy:
-      matrix:
-        python-version: [3.6, 3.7, 3.8, 3.9]
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2  # Obtiene el código del repositorio
@@ -31,7 +25,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v2
         with:
-          python-version: ${{ matrix.python-version }}  # Configura la versión de Python según la matriz
+          python-version:  3.x
 
       - name: Install Dependencies
         run: |
