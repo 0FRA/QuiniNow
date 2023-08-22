@@ -2,28 +2,44 @@ name: daily-report
 
 on:
   schedule:
-    - cron: '30 10-22 * * 1-6'  # Este cron ejecuta el flujo de trabajo cada hora entre las 10:30 y las 22:30, de lunes a sábado (días 1 al 6)
-  workflow_dispatch:    # This allows manual triggering of the workflow
+    - cron: '30 10-22 * * 1-6'  # Programa el flujo de trabajo para ejecutarse cada hora entre las 10:30 y las 22:30, de lunes a sábado
+
+  # Permite activar manualmente el flujo de trabajo si es necesario
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
+    # Define una matriz de versiones de Python para ejecutar el flujo de trabajo en paralelo en diferentes versiones
+    strategy:
+      matrix:
+        python-version: [3.6, 3.7, 3.8, 3.9]
+
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2  # Obtiene el código del repositorio
+
+      - name: Cache Dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip  # Ruta donde se almacenarán en caché las dependencias de pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}  # Clave basada en el sistema operativo y el contenido de requirements.txt
+          restore-keys: |
+            ${{ runner.os }}-pip-  # Clave para restaurar la caché
 
       - name: Setup Python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.x  # Specify the desired Python version
+          python-version: ${{ matrix.python-version }}  # Configura la versión de Python según la matriz
 
       - name: Install Dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          python -m pip install --upgrade pip  # Actualiza pip a la última versión
+          pip install -r requirements.txt  # Instala las dependencias del proyecto desde el archivo requirements.txt
 
       - name: Run QuiniNow code
         env:
-          WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}  # Assuming you have a secret named "WEBHOOK_URL"
-        run: python Main.py  # Replace with the correct script name
+          WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}  # Obtiene la URL del webhook de los secretos del repositorio
+        run: python Main.py  
+
