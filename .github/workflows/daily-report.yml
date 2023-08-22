@@ -2,7 +2,7 @@ name: daily-report
 
 on:
   schedule:
-    - cron: '0 * * * *'  # This schedule runs the workflow every hour
+    - cron: '30 10-22 * * 1-6'  # Este cron ejecuta el flujo de trabajo cada hora entre las 10:30 y las 22:30, de lunes a sábado (días 1 al 6)
   workflow_dispatch:    # This allows manual triggering of the workflow
 
 jobs:
