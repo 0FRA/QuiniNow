@@ -59,14 +59,16 @@ def extract_results(container):
 
 def get_quiniela_type_by_time():
     current_time = datetime.utcnow() + timedelta(hours=-3)  # GMT-3 for Buenos Aires
-    if current_time.hour >= 21:
+    if current_time.hour >= 22:
         return "Nocturna", "🕘"
     elif current_time.hour >= 18:
         return "Vespertina", "🕕"
     elif current_time.hour >= 15:
         return "Matutina", "🕒"
-    elif current_time.hour >= 12:
+    elif current_time.hour >= 13:
         return "Primera", "🕛"
+    elif current_time.hour >= 10:
+        return "Previa", "🕥"
     else:
         return None, ""
 
